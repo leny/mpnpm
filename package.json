@@ -1,0 +1,45 @@
+{
+    "name": "mpnpm",
+    "description": "My Personal NPM (NPM Lazy Mirror)",
+    "keywords": [
+        "npm",
+        "mirror",
+        "lazy"
+    ],
+    "version": "0.0.1-7",
+    "homepage": "https://github.com/leny/mpnpm",
+    "author": {
+        "name": "Leny",
+        "email": "info@flatland.be",
+        "url": "http://leny.me"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/leny/mpnpm.git"
+    },
+    "bugs": {
+        "url": "https://github.com/leny/mpnpm/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/leny/mpnpm/blob/master/LICENSE-MIT"
+        }
+    ],
+    "engines": {
+        "node": ">= 0.10.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4",
+        "grunt-clear": "~0.2",
+        "grunt-contrib-coffee": "~0.4",
+        "grunt-contrib-copy": "~0.4",
+        "grunt-contrib-jshint": "~0.1",
+        "grunt-bumpup": "~0.2",
+        "grunt-contrib-watch": "~0.2",
+        "grunt-nodemon": "~0.1",
+        "grunt-concurrent": "~0.2",
+        "matchdep": "~0.1"
+    }
+}
