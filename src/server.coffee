@@ -2,6 +2,7 @@
  * https://github.com/leny/mpnpm
  *
  * COFFEE/JS Document - /server.js
+ * main entry point, server set up
  *
  * Copyright (c) 2013 Leny
  * Licensed under the MIT license.
@@ -9,10 +10,11 @@
 
 "use strict"
 
-http = require "http"
 root = "#{ __dirname }"
 
+fs = require "fs"
 
+express = require "express"
 app = express()
 
 config = require "#{ root }/../config.json"

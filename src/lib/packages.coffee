@@ -17,23 +17,27 @@ fs = require "fs"
 
 config = require "#{ root }/../config.json"
 
-sCachePath = "#{ root }/../#{ config.cache.dir }/packages/"
-
-if not fs.existsSync sCachePath
-    fs.mkdirSync sCachePath
+sCachePath = "#{ root }/../#{ config.cache.dir }/"
 
 getPackage = ( oRequest, oResponse ) ->
-    sPackageCachePath = "#{ sCachePath }#{ oRequest.params.package }.json"
+    sPackageCacheFolder = "#{ sCachePath }/#{ oRequest.params.package }/"
+    sPackageCachePath = "#{ sPackageCacheFolder }#{ oRequest.params.package }.json"
     if fs.existsSync sPackageCachePath
         if ( fs.statSync( sPackageCachePath ).mtime.getTime() + config.cache.ttl ) > ( new Date() ).getTime()
             return oResponse.json JSON.parse fs.readFileSync sPackageCachePath,
                 encoding: "utf-8"
+        else
+            for oFile in fs.readdirSync sPackageCacheFolder
+                fs.unlinkSync "#{ sPackageCacheFolder }#{ oFile }"
+            fs.rmdirSync sPackageCacheFolder
     request "#{ config.npm.registry }/#{ oRequest.params.package }", ( oError, oRequestResponse ) ->
         if not oError and oRequestResponse.statusCode is 200
             oPackage = JSON.parse oRequestResponse.body
             for sVersion, oVersionInfos of oPackage.versions
                 if oVersionInfos.dist and oVersionInfos.dist.tarball
                     oPackage.versions[ sVersion ].dist.tarball = oPackage.versions[ sVersion ].dist.tarball.replace config.npm.registry, "http://localhost:#{ config.server.port }"
+            if not fs.existsSync sPackageCachePath
+                fs.mkdirSync sPackageCacheFolder
             fs.writeFileSync sPackageCachePath, JSON.stringify oPackage
             oResponse.json oPackage
         else
