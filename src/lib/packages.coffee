@@ -21,22 +21,22 @@ config = require "#{ root }/../config.json"
 
 sCachePath = "#{ root }/../#{ config.cache.dir }/"
 
-getPackage = ( oRequest, oResponse ) ->
-    sPackageCacheFolder = "#{ sCachePath }#{ oRequest.params.package }/"
-    sPackageCachePath = "#{ sPackageCacheFolder }#{ oRequest.params.package }.json"
+getPackage = ( sPackageName, sPackageRegistryURL, oRequest, oResponse ) ->
+    sPackageCacheFolder = "#{ sCachePath }#{ sPackageName }/"
+    sPackageCachePath = "#{ sPackageCacheFolder }#{ sPackageName }.json"
     if fs.existsSync sPackageCachePath
         if ( fs.statSync( sPackageCachePath ).mtime.getTime() + config.cache.ttl ) > ( new Date() ).getTime()
-            logger "serve package #{ oRequest.params.package } from cache"
+            logger "serve package #{ sPackageName } from cache"
             return oResponse.json JSON.parse fs.readFileSync sPackageCachePath,
                 encoding: "utf-8"
         else
-            logger "cached package #{ oRequest.params.package } files are too old, deleted"
+            logger "cached package #{ sPackageName } files are too old, deleted"
             for oFile in fs.readdirSync sPackageCacheFolder
                 fs.unlinkSync "#{ sPackageCacheFolder }#{ oFile }"
             fs.rmdirSync sPackageCacheFolder
-    request "#{ config.npm.registry }/#{ oRequest.params.package }", ( oError, oRequestResponse ) ->
+    request sPackageRegistryURL, ( oError, oRequestResponse ) ->
         if not oError and oRequestResponse.statusCode is 200
-            logger "serve package #{ oRequest.params.package } from registry"
+            logger "serve package #{ sPackageName } from registry"
             oPackage = JSON.parse oRequestResponse.body
             for sVersion, oVersionInfos of oPackage.versions
                 if oVersionInfos.dist and oVersionInfos.dist.tarball
@@ -46,8 +46,19 @@ getPackage = ( oRequest, oResponse ) ->
             fs.writeFileSync sPackageCachePath, JSON.stringify oPackage
             oResponse.json oPackage
         else
-            logger "error when serving package #{ oRequest.params.package } from registry"
+            logger "error when serving package #{ sPackageName } from registry"
             oResponse.send oRequestResponse.statusCode or 404
 
+getLastPackage = ( oRequest, oResponse ) ->
+    sPackageName = oRequest.params.package
+    sPackageRegistryURL = "#{ config.npm.registry }/#{ sPackageName }"
+    getPackage( sPackageName, sPackageRegistryURL, oRequest, oResponse )
+
+getVersionnedPackage = ( oRequest, oResponse ) ->
+    sPackageName = "#{ oRequest.params.package }-#{ oRequest.params.version }"
+    sPackageRegistryURL = "#{ config.npm.registry }/#{ oRequest.params.package }/#{ oRequest.params.version }"
+    getPackage( sPackageName, sPackageRegistryURL, oRequest, oResponse )
+
 exports.init = ( oApp ) ->
-    oApp.get '/:package', getPackage
+    oApp.get "/:package", getLastPackage
+    oApp.get "/:package/:version", getVersionnedPackage
