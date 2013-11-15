@@ -1,6 +1,7 @@
-###
- * mpnpm
+### mpnpm
  * https://github.com/leny/mpnpm
+ *
+ * COFFEE/JS Document - /server.js
  *
  * Copyright (c) 2013 Leny
  * Licensed under the MIT license.
@@ -9,11 +10,19 @@
 "use strict"
 
 http = require "http"
+root = "#{ __dirname }"
 
-server = http.createServer()
 
-server.on "request", ( oRequest, oResponse ) ->
+app = express()
+
+config = require "#{ root }/../config.json"
+
+sCachePath = "#{ root }/../#{ config.cache.dir }/"
+
+if not fs.existsSync sCachePath
+    fs.mkdirSync sCachePath
+
     console.log oRequest.method, oRequest.url
-    oResponse.end()
+require( "#{ root }/lib/packages.js" ).init app
 
-server.listen 8080, "localhost"
+app.listen config.server.port
