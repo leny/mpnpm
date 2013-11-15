@@ -41,7 +41,7 @@ getPackage = ( oRequest, oResponse ) ->
             for sVersion, oVersionInfos of oPackage.versions
                 if oVersionInfos.dist and oVersionInfos.dist.tarball
                     oPackage.versions[ sVersion ].dist.tarball = oPackage.versions[ sVersion ].dist.tarball.replace config.npm.registry, "http://localhost:#{ config.server.port }"
-            if not fs.existsSync sPackageCachePath
+            if not fs.existsSync sPackageCacheFolder
                 fs.mkdirSync sPackageCacheFolder
             fs.writeFileSync sPackageCachePath, JSON.stringify oPackage
             oResponse.json oPackage
