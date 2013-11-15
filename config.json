@@ -4,9 +4,10 @@
     },
     "cache": {
         "dir": ".mpnpm",
-        "ttl": 10
+        "ttl": 3600000
     },
     "server": {
+        "log": true,
         "port": 54321
     }
 }
