@@ -53,7 +53,7 @@ getPackage = function(sPackageName, sPackageRegistryURL, oRequest, oResponse) {
       for (sVersion in _ref1) {
         oVersionInfos = _ref1[sVersion];
         if (oVersionInfos.dist && oVersionInfos.dist.tarball) {
-          oPackage.versions[sVersion].dist.tarball = oPackage.versions[sVersion].dist.tarball.replace(config.npm.registry, "http://localhost:" + config.server.port);
+          oPackage.versions[sVersion].dist.tarball = oPackage.versions[sVersion].dist.tarball.replace(config.npm.registry, config.server.url);
         }
       }
       if (!fs.existsSync(sPackageCacheFolder)) {

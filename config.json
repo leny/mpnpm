@@ -8,6 +8,7 @@
     },
     "server": {
         "log": true,
-        "port": 54321
+        "port": 54321,
+        "url": "http://localhost:54321"
     }
 }
