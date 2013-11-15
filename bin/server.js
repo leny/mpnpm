@@ -30,5 +30,6 @@ if (!fs.existsSync(sCachePath)) {
 
 require("" + root + "/lib/packages.js").init(app);
 
+require("" + root + "/lib/archives.js").init(app);
 
 app.listen(config.server.port);

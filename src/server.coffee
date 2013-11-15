@@ -24,7 +24,7 @@ sCachePath = "#{ root }/../#{ config.cache.dir }/"
 if not fs.existsSync sCachePath
     fs.mkdirSync sCachePath
 
-    console.log oRequest.method, oRequest.url
 require( "#{ root }/lib/packages.js" ).init app
+require( "#{ root }/lib/archives.js" ).init app
 
 app.listen config.server.port
