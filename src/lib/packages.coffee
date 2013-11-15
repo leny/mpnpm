@@ -22,7 +22,7 @@ config = require "#{ root }/../config.json"
 sCachePath = "#{ root }/../#{ config.cache.dir }/"
 
 getPackage = ( oRequest, oResponse ) ->
-    sPackageCacheFolder = "#{ sCachePath }/#{ oRequest.params.package }/"
+    sPackageCacheFolder = "#{ sCachePath }#{ oRequest.params.package }/"
     sPackageCachePath = "#{ sPackageCacheFolder }#{ oRequest.params.package }.json"
     if fs.existsSync sPackageCachePath
         if ( fs.statSync( sPackageCachePath ).mtime.getTime() + config.cache.ttl ) > ( new Date() ).getTime()
