@@ -1,0 +1,12 @@
+{
+    "npm": {
+        "registry": "http://registry.npmjs.org"
+    },
+    "cache": {
+        "dir": ".mpnpm",
+        "ttl": 10
+    },
+    "server": {
+        "port": 54321
+    }
+}
