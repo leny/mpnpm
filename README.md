@@ -4,6 +4,10 @@
 
 * * *
 
+## Warning : this plugin is not maintained anymore
+
+* * *
+
 **mpnpm** is a lazy local mirror/cache for npm.
 
 **mpnpm** is a reinterpretation of the [npm_lazy package from mixu](https://github.com/mixu/npm_lazy).
